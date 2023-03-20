@@ -21,7 +21,7 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "no-unused-vars": "error", // 사용하지않는 변수 error처리 하겠다.
+        // "no-unused-vars": "error", // 사용하지않는 변수 error처리 하겠다.
         "no-console": "off"
     }
 }
