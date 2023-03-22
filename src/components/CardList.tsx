@@ -1,17 +1,18 @@
 import React from 'react'
 import '../styles/cardList.scss'
 import Card from './Card'
-import {useRecoilState} from 'recoil'
+import { useRecoilValue} from 'recoil'
 import {cardListData} from '../store/atom'
+import NoCardError from './NoCardError'
 
 const CardList = () => {
 
-    const [cardList, setCardList] = useRecoilState(cardListData);
+    const cardList= useRecoilValue(cardListData);
 
     return (
         <section className='cardList-container'>
-            {cardList ? 
-                cardList.list
+            {cardList
+              ? cardList
                     .filter( card => card.thumbnail)
                     .map( card => (
                         <Card 
@@ -19,7 +20,7 @@ const CardList = () => {
                             {...card}
                         />
                     ))
-            : "없스빈다."
+            : <NoCardError />
             }
         </section>
     )

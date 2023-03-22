@@ -2,4 +2,21 @@
     border: 1px solid rgb(209, 209, 209);
     height: 4rem;
     width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    div {
+        padding: 10px;
+        display: flex;
+    }
+
+    div:nth-child(3){
+        align-items: center;
+        select {
+            border: 1px solid red;
+
+        }
+    }
 }
+

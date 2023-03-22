@@ -5,16 +5,23 @@ import { ReactComponent as Moon } from '../images/moon-svgrepo-com.svg'
 import { ReactComponent as Sun } from '../images/sun-svgrepo-com.svg'
 import {ReactComponent as VelogLog} from '../images/velog-log.svg';
 
-const LOCALSTORAGE_KEY = "initialSettingOfVelog";
-
-type LocalStorageType = {
-    velogClone: {
-        darkmode : boolean
+export const LOCALSTORAGE_KEY = "initialSettingOfVelog";
+ 
+export type LocalStorageType = {
+    velogClone:{
+        darkmode : boolean,
+        card : {
+            dayFilter : string,
+            categorys : {
+                tranding : boolean,
+                recent : boolean,
+                popular : boolean
+            }
+        }
     }
 }
 
 const Nav = () => {
-
     const [darkMode, setDarkmode] = useState(false);
     
     const onChangeMode = () => {
@@ -25,7 +32,7 @@ const Nav = () => {
     const setMode = () => {
         const currentLocalData = localStorage.getItem(LOCALSTORAGE_KEY);
         if(currentLocalData) {
-            const newData = JSON.parse(currentLocalData);
+            const newData:LocalStorageType = {...JSON.parse(currentLocalData)}
             newData.velogClone.darkmode = !darkMode
             localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(newData))
         }
@@ -34,23 +41,27 @@ const Nav = () => {
 
     // 초기 모드 설정 함수
     const setInitDataInLocalstorage = () => {
-        const initData = {
+        localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify({
             velogClone : {
-                darkmode : false
+                darkmode : false,
+                card : {
+                    dayFilter : "all",
+                    categorys : {
+                        tranding : true,
+                        recent : false,
+                        popular : false
+                    }
+                }
             }
-        }
-        localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(initData))
+        }))
     }
 
     useEffect(() => {
-        // localstorige 값 찾기
-        const localData = localStorage.getItem(LOCALSTORAGE_KEY);
-        
-        // 로컬스토리지에 값이 없는 경우, 초기 데이터를 저장시키고 화이트모드로 설정
-        if(!localData)  setInitDataInLocalstorage();
-        else {
+        // localstorige 값 찾기, 없을경우 초기 데이터를 로컬스토리지에 저장
+        const localData = localStorage.getItem(LOCALSTORAGE_KEY) ?? setInitDataInLocalstorage();
+        if(localData){
             const data:LocalStorageType = JSON.parse(localData);
-            setDarkmode(data.velogClone.darkmode)
+            setDarkmode(data.velogClone.darkmode ?? false )
         }
     },[])
 
