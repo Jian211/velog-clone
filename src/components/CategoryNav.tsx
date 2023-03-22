@@ -33,13 +33,15 @@ const selectData: ISelectData = {
     }
 }
 
+type FilterType = "all" | "day" |"weed" | "month"| "year"
+
 const CategoryNav = () => {
 
     const setCardList = useSetRecoilState(cardListData);
-    const [filterType, setFilterType] = useState("all");
+    const [filterType, setFilterType] = useState<string>();
     const [showSettingBtn, setShowSettingBtn] = useState(false);
 
-    const selectRef = useRef<HTMLSelectElement>(null)
+    const selectRef = useRef<HTMLSelectElement>(null);
 
     //유저가 선택한 카테고리에 따라서 리스트를 재 설정하는 메소드
     const handleCateList = (target:string) => () => setCardList( curr => selectData[target](curr))
@@ -47,38 +49,30 @@ const CategoryNav = () => {
     const handleShowChild = () => setShowSettingBtn(curr => !curr);
 
     const handleDateFilterSubmit = () => {
-        setFilterType((curr)=>{
-            console.log(curr, "현재뭡니가")
-            selectRef.current?.value ?? "all"
-            console.log(selectRef.current?.value)
-            return "all"
-        })
-        setFilterTypeInLocalstorage()
+        if(selectRef.current){
+            setFilterTypeInLocalstorage(selectRef.current.value)
+            setFilterType(selectRef.current.value)
+        }
         setShowSettingBtn(curr => !curr)
-        console.log(selectRef.current?.value)
     }
 
-    const setFilterTypeInLocalstorage = () => {
-        console.log(filterType ,"왜 1이지")
+    const setFilterTypeInLocalstorage = (value:string) => {
         const currentLocalData = localStorage.getItem(LOCALSTORAGE_KEY)
         if(currentLocalData) {
             const newData:LocalStorageType = {...JSON.parse(currentLocalData)}
-            newData.velogClone.card.dayFilter = filterType
+            newData.velogClone.card.dayFilter = value
             localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify({...newData}))
         }
     }
 
     useEffect(()=>{
-        console.log("잎풱",filterType)
         const localstorageData = localStorage.getItem(LOCALSTORAGE_KEY);
         if(localstorageData){
-            const dateFilter:LocalStorageType = JSON.parse(localstorageData);
-            const {dayFilter} = dateFilter.velogClone.card;
-            const [filterResult] = Object.entries(dayFilter).filter( value => value[1])[1];
-            setFilterType(filterResult)
+            const {velogClone : {card : {dayFilter}}}:LocalStorageType = JSON.parse(localstorageData);
+            console.log(dayFilter,"묽")
+            setFilterType(dayFilter)
         }
-        console.log("잎풱",filterType)
-    }, [])
+    }, [filterType])
 
     return (
         <div className="categoryNav-container">
@@ -97,11 +91,12 @@ const CategoryNav = () => {
                 </div>
 
                 <div style={{ display:  showSettingBtn ? "flex" : "none" }}>
-                    <select ref={selectRef} name="filter" defaultValue="all" >
-                        <option value="all">전체</option>
+                    <select name="filter" ref={selectRef} defaultValue={filterType} key={filterType} >
+                        <option value="all" >전체</option>
                         <option value="day">1일</option>
                         <option value="week">일주일</option>
                         <option value="month">한달</option>    
+                        <option value="year">일년</option>    
                     </select>
                     <button onClick={handleDateFilterSubmit}>저장</button>
                 </div>

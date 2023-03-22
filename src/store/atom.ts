@@ -73,13 +73,7 @@ export const initUserSetting = atom({
         velogClone : {
             darkmode : false,
             card : {
-                dayFilter : {
-                    all : true,
-                    today : false,
-                    week : false,
-                    month : false,
-                    year : false
-                },
+                dayFilter : "all",
                 categorys : {
                     tranding : true,
                     recent : false,
