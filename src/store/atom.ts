@@ -1,4 +1,4 @@
-import { atom } from "recoil"
+import { atom, selectorFamily } from "recoil"
 
 import {getTrandingList} from '../api'
 
@@ -66,6 +66,37 @@ type User = {
 export interface ICardList {
     list: ICard[]
 }
+export interface ILocalStorage {
+    velogClone:{
+        darkmode : boolean,
+        card : {
+            dayFilter : string,
+            categorys : {
+                tranding : boolean,
+                recent : boolean,
+                popular : boolean
+            },
+            paging: number
+        }
+    }
+}
+
+interface ISelectPeriodData {
+    [key: string] :(arr:ICard[]) => ICard[]
+}
+const selectPeriodData:ISelectPeriodData = {
+    all   : (arr) => [...arr],
+    day   : (arr) => [...arr.filter( ({released_at}) => getPeriodDiff(released_at) < 2)],
+    week  : (arr) => [...arr.filter( ({released_at}) => getPeriodDiff(released_at) < 8)],
+    month : (arr) => [...arr.filter( ({released_at}) => getPeriodDiff(released_at, 30) < 1 )],
+    year  : (arr) => [...arr.filter( ({released_at}) => getPeriodDiff(released_at, 365) < 1 )],
+}
+
+const getPeriodDiff = (d1 :string, period = 1) => {
+    const before = new Date(d1).getTime();
+    const now = new Date().getTime();
+    return Math.floor(Math.abs((now - before) / (1000 * 60 * 60 * 24 * period)));
+}
 
 export const initUserSetting = atom({
     key: "initSetting",
@@ -79,14 +110,32 @@ export const initUserSetting = atom({
                     recent : false,
                     popular : false
                 }
-            }
+            },
+            paging : 0
         }
     }
+})
+
+export const currPeriod = atom({
+    key: "perios",
+    default: "all",
 })
 
 export const cardListData = atom<ICard[]>({
     key: "cardList",
     default : getTrandingList()
+})
+
+export const cardFilterData = selectorFamily({
+    key:"cardFiler",
+    get: () => ({get}) => {
+        const period = get(currPeriod)
+        const list = get(cardListData)
+        return selectPeriodData[period](list)
+    },
+    set: () => ({set}, newValue) => { 
+        console.log()
+    }
 })
 
 // export const trandingCaraData = selector<ICard[]>({

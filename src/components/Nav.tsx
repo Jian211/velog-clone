@@ -4,22 +4,10 @@ import { ReactComponent as Search} from '../images/search-svgrepo-com.svg'
 import { ReactComponent as Moon } from '../images/moon-svgrepo-com.svg'
 import { ReactComponent as Sun } from '../images/sun-svgrepo-com.svg'
 import {ReactComponent as VelogLog} from '../images/velog-log.svg';
+import { ILocalStorage } from '../store/atom';
 
 export const LOCALSTORAGE_KEY = "initialSettingOfVelog";
  
-export type LocalStorageType = {
-    velogClone:{
-        darkmode : boolean,
-        card : {
-            dayFilter : string,
-            categorys : {
-                tranding : boolean,
-                recent : boolean,
-                popular : boolean
-            }
-        }
-    }
-}
 
 const Nav = () => {
     const [darkMode, setDarkmode] = useState(false);
@@ -32,7 +20,7 @@ const Nav = () => {
     const setMode = () => {
         const currentLocalData = localStorage.getItem(LOCALSTORAGE_KEY);
         if(currentLocalData) {
-            const newData:LocalStorageType = {...JSON.parse(currentLocalData)}
+            const newData:ILocalStorage = {...JSON.parse(currentLocalData)}
             newData.velogClone.darkmode = !darkMode
             localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(newData))
         }
@@ -60,7 +48,7 @@ const Nav = () => {
         // localstorige 값 찾기, 없을경우 초기 데이터를 로컬스토리지에 저장
         const localData = localStorage.getItem(LOCALSTORAGE_KEY) ?? setInitDataInLocalstorage();
         if(localData){
-            const data:LocalStorageType = JSON.parse(localData);
+            const data:ILocalStorage = JSON.parse(localData);
             setDarkmode(data.velogClone.darkmode ?? false )
         }
     },[])
