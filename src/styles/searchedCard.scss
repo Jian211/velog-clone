@@ -1,0 +1,53 @@
+.searchedCard-container{
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgb(235, 235, 235);
+    cursor: pointer;
+    &__userInfo{
+        padding:1rem 0;
+        display: flex;
+        align-items: center;
+        font-weight: '100';
+
+        img {
+            width: 3rem;
+            height: 3rem;
+            border-radius:50%;
+            margin-right: 1rem;
+        }
+    }
+
+    &__thumnail {
+        img {
+            width: 100%;
+        }
+    }
+
+    h2 {
+        padding: 1rem 0;
+    }
+    p {
+        padding: 0;
+    }
+
+    ul {
+        display: flex;
+        padding: 2rem 0;
+        li {
+            padding: 0.6rem;
+            margin-right: 0.8rem;
+            border-radius: 1rem;
+            background-color: rgb(246, 246, 246);
+            color:rgb(20, 194, 171)
+        }
+    }
+    div:last-child {
+        display: flex;
+        align-items: start;
+        padding-bottom: 4rem;
+        span {
+            margin-right: 0.5rem;
+            display:block;
+        }   
+    }
+} 

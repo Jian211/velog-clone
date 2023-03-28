@@ -10,6 +10,7 @@ import {ReactComponent as Filter} from '../images/filter-circle-svgrepo-com.svg'
 import {ReactComponent as Scroll} from '../images/scroll-down-icon.svg'
 import {ReactComponent as Page} from '../images/page-file-icon.svg'
 import { LOCALSTORAGE_KEY } from "./Nav";
+import { useLocation } from "react-router-dom";
 
 
 interface ISelectData {
@@ -43,8 +44,9 @@ const selectData: ISelectData = {
 const CategoryNav = () => {
     const setCardList = useSetRecoilState(cardListData);
     const [filterType,setFilterType] = useRecoilState(currPeriod);
-    const [{velogClone: {paging}}, setInit] = useRecoilState(initUserSetting);
+    const [{velogClone: {pageMode}}, setInit] = useRecoilState(initUserSetting);
     const [showSettingBtn, setShowSettingBtn] = useState(false);
+    const {pathname} = useLocation();
 
     const selectRef = useRef<HTMLSelectElement>(null);
 
@@ -89,12 +91,16 @@ const CategoryNav = () => {
         }
     }
 
-    const handlePaging = (paging = 0) => () => {
-
-        return setInit( curr => {
-            const newData = {...curr};
-            newData.velogClone.paging = paging;
-            return newData
+    const handlePaging = (mode = "page") => () => {
+         setInit( curr => {
+            const newValue = {
+                velogClone : {
+                    ...curr.velogClone,
+                    pageMode: mode
+                }
+            }
+            localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(newValue))
+            return newValue;
         });
     }
 
@@ -108,47 +114,55 @@ const CategoryNav = () => {
 
     return (
         <div className="categoryNav-container">
-            <div onClick={handleCateList("tranding")}>
-                <Tranding />                
-                <h4>트렌딩</h4>
-            </div>
-            <div onClick={handleCateList("recent")}>
-                <Clock />                
-                <h4>최신</h4>
-            </div>
-            <div onClick={handleCateList("heart")}>
-                <Heart />                
-                <h4>인기</h4>
-            </div>
-            <div>
-                <div onClick={handleShowChild}>
-                    <Filter />                
-                    <h4>필터링</h4>
+            {pathname === "/" && 
+            <>
+                <div onClick={handleCateList("tranding")}>
+                    <Tranding />                
+                    <h4>트렌딩</h4>
                 </div>
+                <div onClick={handleCateList("recent")}>
+                    <Clock />                
+                    <h4>최신</h4>
+                </div>
+                <div onClick={handleCateList("heart")}>
+                    <Heart />                
+                    <h4>인기</h4>
+                </div>
+                <div>
+                    <div onClick={handleShowChild}>
+                        <Filter />                
+                        <h4>필터링</h4>
+                    </div>
 
-                <div style={{ display:  showSettingBtn ? "flex" : "none" }}>
-                    <select name="filter" ref={selectRef} defaultValue={filterType} key={filterType} >
-                        <option value="all" >전체</option>
-                        <option value="day">1일</option>
-                        <option value="week">일주일</option>
-                        <option value="month">한달</option>    
-                        <option value="year">일년</option>    
-                    </select>
-                    <button onClick={handleDateFilterSubmit}>저장</button>
+                    <div style={{ display:  showSettingBtn ? "flex" : "none" }}>
+                        <select name="filter" ref={selectRef} defaultValue={filterType} key={filterType} >
+                            <option value="all" >전체</option>
+                            <option value="day">1일</option>
+                            <option value="week">일주일</option>
+                            <option value="month">한달</option>    
+                            <option value="year">일년</option>    
+                        </select>
+                        <button onClick={handleDateFilterSubmit}>저장</button>
+                    </div>
                 </div>
-            </div>
-            
-            <div
-                onClick={handlePaging(0)} 
-                style={{ color : paging === 0 ? "black":"gray"}}
-            >
-                <Page width={16} />
-                <h4>페이지형식</h4>
-            </div>
-            <div style={{ color : paging === 1 ? "black":"gray"}}> 
-                <Scroll width={14} />
-                <h4>스크롤형식</h4>
-            </div>
+                <div>
+                    <div
+                        onClick={handlePaging("page")} 
+                        style={{ color : pageMode === "page" ? "black":"gray"}}
+                    >
+                        <Page width={16} />
+                        <h4>페이지형식</h4>
+                    </div>
+
+                    <div
+                        onClick={handlePaging("scroll")}
+                        style={{ color : pageMode === "scroll" ? "black":"gray"}}
+                    > 
+                        <Scroll width={14} />
+                        <h4>스크롤형식</h4>
+                    </div>
+                </div>
+            </>}
         </div>
     )
 }

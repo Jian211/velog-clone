@@ -8,12 +8,14 @@
     border-radius: 0.6rem;
     overflow: hidden;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-
+    background-color: var(--color-card-background);
+    color:var(--color-text);
     &:hover {
         top: -10px;
         transition: top 1s ease-in-out;
         box-shadow: rgba(82, 82, 82, 0.35) 0px 10px 15px;
     }
+ 
 
     div:nth-child(1) {
         flex: 3
@@ -70,7 +72,7 @@
     }
 
     hr {
-        background: rgb(230, 231, 231);
+        background: var(--color-card-background);
         border:0;
         height: 1px;
     }
@@ -86,10 +88,21 @@
             justify-content: left;
             align-items: center;
 
-            span{
+            span {
                 display: flex;      
                 align-items: center;          
-                padding: 10px;
+            }
+            span:first-child{
+                display: flex;      
+                align-items: center;          
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-right: 1rem;
+            }
+            span > img {
+                width: 100%;
             }
         }
 

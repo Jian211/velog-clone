@@ -1,0 +1,283 @@
+.cardDetail-container {
+    display: flex;
+    
+    aside {
+        flex: 1;
+    }
+    color:var( --color-text);
+
+    .cardDetail-container__center{
+        max-width: 720px;
+        &__intro-part{
+            h1{
+                padding: 1.5rem 0 ;
+                font-size: 3rem;
+                line-height: 4.5rem;
+            }
+            div:nth-child(2){
+                padding: 0.4rem 0;
+                h4{
+                    display: inline-block;
+                }
+            }
+    
+            &__tags {
+                display: flex;
+                margin-bottom: 2rem;
+                li {
+                    padding : 0.6rem;
+                    margin-right: 1rem;
+                    border-radius: 20px;
+                    background-color: rgb(246, 246, 246);
+                    color:rgb(20, 194, 171)
+
+                }
+            }
+
+            &__simple-contents {
+                display: flex;
+
+                &__heart-share{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    align-items: center;
+                    border: 1px solid  gray;
+                    padding: 6px;
+                    border-radius: 3rem;         
+                    background-color: var(--color-btn-gray);           
+                    div {
+                        background-color: var(--color-btn-gray);           
+                        margin: 0.1rem 0;
+                        padding:10px;
+                        svg {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    
+                    div:first-child, div:last-child{
+                        background-color: var(--color-background);
+                        border:1px solid gray;
+                        border-radius: 50%;
+                    }
+                }
+
+                article:nth-child(2){
+                    border: 1px solid red;
+                    width: 100%;
+                }
+                article:last-child{
+                    border: 1px solid red;
+                }
+            }
+        }
+        &__content{
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+
+            div{
+                font-size: 1rem;
+            }
+
+            img{
+                width: 100%;
+                padding: 4rem 0;
+            }
+
+            h1{
+                font-size: 2.5rem;
+            }
+
+            &__info{    
+                background-color: pink;
+            }
+          
+        }
+        &__userInfo{
+            article:first-child{
+                margin: 2rem 0 ;
+                display: flex;
+                align-items: center;
+                div:first-child{
+                    margin-right: 1.5rem;
+                    width: 8rem;
+                    height: 8rem;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    img {
+                        width: 100%;
+                    }
+                }
+
+                div:last-child{
+                    h3{
+                        padding: 0.4rem 0;
+                    }
+                }
+            }
+            article:last-child{
+                display: flex;
+                margin-bottom: 2rem;
+                div {
+                    color: rgb(180, 180, 180);
+                    display: flex;
+                    align-items: center;
+                    width: 3rem;
+                    height: 3rem;
+                }
+                div > svg{
+                    width: 100%;
+                    cursor: pointer;
+                    margin-right: 1rem;
+                }
+                div > svg:hover{
+                    color:rgb(56, 56, 56);
+                }
+            }
+        }
+        &__previousPost{
+            
+            article:first-child{
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                margin: 3rem 0;
+                background-color: rgb(246, 246, 246);
+                border-radius: 1rem;
+                width: 24rem;
+                height: 4rem;
+                div:first-child{
+                    color:rgb(43, 170, 128);
+                    border:1px solid rgb(43, 170, 128);
+                    width: 2rem;
+                    height: 2rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    margin:0 1rem;
+                    img {
+                        width: 100%;
+                    }
+                }
+
+                div:last-child {
+                    h5,h4{
+                        margin: 0.8rem 0;
+                        color: gray;
+                    }
+                }
+            }
+        }
+        &__comment-form{
+            height: 14rem;
+            h3:first-child{
+                padding: 1rem 0;
+            }
+
+            form:last-child {
+                
+                textarea {
+                    width: 100%;
+                    height: 5rem;
+                    resize: none;
+                    border: 1px solid rgb(238, 238, 238);
+                    border-radius: 1rem;
+                    padding: 1rem;
+                    overflow: hidden;
+                }
+                button{
+                    float: right;
+                    padding: 0.8rem 1.6rem;
+                    border-radius: 1rem;
+                    margin: 1rem 0;
+                    background-color: rgb(111, 209, 140);
+                    color: white;
+                }
+            }
+        }
+        &__comments{
+            padding:2rem 0;
+            border-bottom: 1px solid rgb(83, 41, 41);
+            display: flex;
+            flex-direction: column;
+
+            div:first-child{
+                margin: 1rem 0;
+                display: flex;
+                align-items: center;
+
+                div:first-child{
+                    width: 3.4rem;
+                    height: 3.4rem;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    margin-right: 1rem;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                div:last-child{
+                    p{
+                        font-size: 0.9rem;
+                        color:gray;
+                    }
+                    h4,p{
+                        padding:0.2rem 0;
+                    }
+                }
+            }
+            p {
+                font-size: large;
+                padding-bottom:2rem;
+            }
+            button{
+                color: rgb(107, 194, 133);  
+                cursor: pointer;
+                margin: 2rem 0;
+            }
+            form {
+                border: 1px solid rgb(243, 243, 243);
+                padding: 1.3rem;
+                border-radius: 1rem;
+                textarea {
+                    width: 100%;
+                    height: 6rem;
+                    border: 1px solid  rgb(243, 243, 243);
+                    resize: none;
+                    overflow: hidden;
+                    border-radius: 1rem;
+                    padding:1rem;
+                    margin-bottom: 1rem;
+                }
+                div:last-child {
+                    display: flex;
+                    justify-content: end;
+                    align-items: center;
+                    height: 3rem;
+
+                    button{
+                        border-radius: 1rem;
+                        padding: 0.8rem 1rem ;
+                        margin-left: 1rem;
+                    }
+
+                    button:first-child:hover{
+                        background-color: rgb(243, 243, 243);
+                    }
+
+                    button:last-child{
+                        background-color: rgb(107, 194, 133);
+                        color:white;
+                    }
+                    button:last-child:hover {
+                        background-color:rgb(127, 211, 152);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,19 +1,23 @@
-import React,{useEffect,useState} from 'react'
+import React,{forwardRef} from 'react'
 import { ICard } from '../store/atom'
 import '../styles/card.scss'
 import { ReactComponent as Heart } from '../images/heart.svg'
-import { ReactComponent as User } from '../images/user-profile-icon.svg'
+import { useNavigate } from 'react-router-dom'
+import { showReleseDate } from '../lib/getPeriod'
 
-const Card = ({id,title,short_description,comments_count,is_private,likes,released_at,tags,thumbnail,updated_at,url_slug,user}:ICard) => {
 
-    const showReleseDate =  () => {
-        const date = new Date(released_at);
-        return `${date.getFullYear()}년 ${date.getMonth()+1}월 ${date.getDate()}일`
-    }
-
+const Card = (
+        {id,title,short_description,comments_count,likes,released_at,thumbnail,user}:ICard,
+        cardRef: React.ForwardedRef<HTMLDivElement> | null
+    ) => {
+    
+    const navigate = useNavigate();
+    
+    const handleDetail = () => navigate(`/card/${id}`)
+  
     return (
-        <article className='card-container'>
-            
+        <div className='card-container' ref={cardRef} onClick={handleDetail} >
+
             {thumbnail &&
                 <div className='card-container__image-form'>
                     <img src= {thumbnail+''}/>
@@ -24,7 +28,7 @@ const Card = ({id,title,short_description,comments_count,is_private,likes,releas
                 <h4>{title}</h4>
                 <div>{short_description}</div>
                 <div>
-                    <span>{showReleseDate()}</span>
+                    <span>{showReleseDate(released_at)}</span>
                     <span>{comments_count}개의 댓글</span>
                 </div>
             </div>
@@ -32,8 +36,10 @@ const Card = ({id,title,short_description,comments_count,is_private,likes,releas
 
             <div className='card-container__authorAndLikes'>
                 <div>
-                    {/* <img src={user.profile+''} /> 유저이미지 정보를 받을 수 없음 */}
-                    <User width={24}/>
+                    <span>
+                        <img src={user.profile.thumbnail} />
+                    </span>
+                    {/* <User width={24}/> */}
                     <span>by&nbsp;<h6>{user.username}</h6></span>
                 </div>
                 <div>
@@ -41,8 +47,8 @@ const Card = ({id,title,short_description,comments_count,is_private,likes,releas
                     <span>{likes}</span>
                 </div>
             </div>
-        </article>
+        </div>
     )
 }
 
-export default Card
+export default forwardRef<HTMLDivElement | null, ICard>(Card)

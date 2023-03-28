@@ -3,18 +3,23 @@ import '../styles/nav.scss'
 import { ReactComponent as Search} from '../images/search-svgrepo-com.svg'
 import { ReactComponent as Moon } from '../images/moon-svgrepo-com.svg'
 import { ReactComponent as Sun } from '../images/sun-svgrepo-com.svg'
-import {ReactComponent as VelogLog} from '../images/velog-log.svg';
+import { ReactComponent as VelogLog} from '../images/velog-log.svg';
 import { ILocalStorage } from '../store/atom';
+import { useNavigate } from 'react-router-dom';
 
 export const LOCALSTORAGE_KEY = "initialSettingOfVelog";
- 
 
 const Nav = () => {
     const [darkMode, setDarkmode] = useState(false);
+    const navigate = useNavigate();
     
     const onChangeMode = () => {
         setMode();
-        setDarkmode( curr => !curr);
+        setDarkmode( curr => {
+            const changeData = !curr
+            document.documentElement.setAttribute("data-theme",changeData ? "dark" : "ligth")
+            return  changeData
+        });
     } 
 
     const setMode = () => {
@@ -55,7 +60,7 @@ const Nav = () => {
 
     return (
         <nav className='nav-container'>
-            <VelogLog />
+            <VelogLog onClick={()=> navigate('/')} />
             <ul>
                 <li onClick={onChangeMode}>
                     {!darkMode 
@@ -70,9 +75,8 @@ const Nav = () => {
                           />
                     }
                 </li>
-                <li>
-                    
-                    <Search width="24" height="24" />
+                <li onClick={() => navigate('/search')}>
+                    <Search width="24" height="24"  />
                 </li>
                 <li>
                     <h4>로그인</h4>

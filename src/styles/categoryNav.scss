@@ -6,6 +6,7 @@
     align-items: center;
 
     div {
+        color:var(--color-text);
         padding: 10px;
         display: flex;
         align-items: center;
@@ -15,11 +16,17 @@
         }
     }
 
-    div:nth-child(3){
-        select {
-            border: 1px solid red;
-
+    div:nth-child(4){
+        div:last-child{
+            border-radius: 1rem;
+            background-color: rgb(231, 231, 231);
         }
+    }
+
+    div:nth-child(5){
+        height: 2.8rem;
+        border-radius: 1rem;;
+        background-color: rgb(231, 231, 231);
     }
 
     

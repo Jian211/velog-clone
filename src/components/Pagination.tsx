@@ -20,7 +20,6 @@ const Pagination = ({total, limit, page, setPage}:IPagination) => {
                     className={index+1 === page ? "cardList__selected" : ""}
                     key={index} 
                     onClick={() => setPage(index + 1)}
-                    
                 >
                     <h4> {index + 1}</h4>
                 </li>

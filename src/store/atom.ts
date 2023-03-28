@@ -1,6 +1,7 @@
-import { atom, selectorFamily } from "recoil"
+import { atom, selector, selectorFamily } from "recoil"
 
 import {getTrandingList} from '../api'
+import { getPeriodDiff } from "../lib/getPeriod"
 
 export interface ICard {
     id: string,
@@ -17,7 +18,7 @@ export interface ICard {
     comments_count: number,
     url_slug: string,
     likes: number,
-    liekd:boolean,
+    liked:boolean,
     user: {
         id: string,
         username: string,
@@ -31,7 +32,22 @@ export interface ICard {
             title:string,
         }
     },
-    comments:[],
+    comments:[{
+        created_at: string,
+        deleted : boolean,
+        id: string,
+        level: number,
+        replies_count: number, 
+        text:string,
+        user :{
+            id:string,
+            profile: {
+                id:string,
+                thumbnail: string
+            },
+            username:string
+        }
+    }],
     series :{
         id:string,
         name:string,
@@ -66,6 +82,7 @@ type User = {
 export interface ICardList {
     list: ICard[]
 }
+
 export interface ILocalStorage {
     velogClone:{
         darkmode : boolean,
@@ -76,7 +93,7 @@ export interface ILocalStorage {
                 recent : boolean,
                 popular : boolean
             },
-            paging: number
+            pageMode: "page"| "scroll"
         }
     }
 }
@@ -92,12 +109,6 @@ const selectPeriodData:ISelectPeriodData = {
     year  : (arr) => [...arr.filter( ({released_at}) => getPeriodDiff(released_at, 365) < 1 )],
 }
 
-const getPeriodDiff = (d1 :string, period = 1) => {
-    const before = new Date(d1).getTime();
-    const now = new Date().getTime();
-    return Math.floor(Math.abs((now - before) / (1000 * 60 * 60 * 24 * period)));
-}
-
 export const initUserSetting = atom({
     key: "initSetting",
     default : {
@@ -111,7 +122,7 @@ export const initUserSetting = atom({
                     popular : false
                 }
             },
-            paging : 0
+            pageMode: "page",
         }
     }
 })
@@ -133,32 +144,45 @@ export const cardFilterData = selectorFamily({
         const list = get(cardListData)
         return selectPeriodData[period](list)
     },
-    set: () => ({set}, newValue) => { 
-        console.log()
+})
+
+export const scrollCardData = selector({
+    key:"scrollCardData",
+    get: ({get}) => {
+        const period = get(currPeriod)
+        const list = get(cardListData)
+        return selectPeriodData[period](list)  
     }
 })
 
-// export const trandingCaraData = selector<ICard[]>({
-//     key:'tranding',
-//     get: ({get}) => {
-//         const {velogClone : {card : {categorys}}} = get(initUserSetting);
-//         const [[target]] = Object.entries(categorys).filter( cate =>  cate[1] )
-//         return  getTrandingList()
-//     }
-// })
+export const scrollCardDataList = selectorFamily({
+    key:"scrollCardDataList",
+    get: (limit) => ({get}) => {
+        const currList = get(scrollCardData);
+        const length =  Number(limit) * get(scrollCnt)
+        return currList.slice(0, length);
+    },
+})
 
-// // recent
-// export const recentCardData = selector({
-//     key: "recentList",
-//     get: ({get}) => {
-//         const allCardList = get(cardListData);
-//         // 업데이트 날짜로 정렬하기 
-//         console.log(allCardList,"전")
-//         allCardList.sort((a, b) => {
-//             return new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()
-//         })
-//         // 여기서 에러발생
-//         console.log(allCardList,"후")
-//         return "recent"
-//     }
-// });
+export const scrollCnt = atom({
+    key:"scrollCnt",
+    default: 1
+})
+
+export const pageMode = selector({
+    key: "pageMode",
+    get: ({get}) => {
+        const pageMode = get(initUserSetting);
+        return pageMode.velogClone.pageMode;
+    },
+})
+
+export const searchedList = atom<ICard[]>({
+    key:"searchedList",
+    default:[]
+})
+
+
+
+
+
